@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Game</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .square{
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+        }
+        .square-green{
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: green;
+        }
+        .tool-bar{
+            height: 10vh;
+            display: flex;
+            align-items: center;
+        }
+        .game-board{
+            height: 90vh;
+            background-color: aliceblue;
+        }
+        .timer-score{
+            display: flex;
+            justify-content: center;
+            width: 50%;
+        }
+        .control-buttons{
+            width: 50%;
+            display: flex;
+            justify-content: center;
+        }
+        .timer{
+            background-color: black;
+            color: red;
+            font-size: 5vh;
+            padding: 5px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .score{
+            background-color: black;
+            color: green;
+            font-size: 5vh;
+            margin: 5px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .control-button{
+            border: none;
+        }
+        .score-card-container{
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .score-card{
+            width: 300px;
+            height: 200px;
+            background-color: aliceblue;
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #score-digits{
+            font-size: 100px;
+        }
+        .play-again button{
+            padding: 10px;
+            margin: 20px;
+            border: none;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="score-card-container" id="score-card-container">
+        <div class="score-card">
+                <h1>Your Score</h1>
+                <div id="score-digits">05</div>
+        </div>
+        <div class="play-again">
+            <button id="play-again-button" onclick="window.location.reload()"><svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M24 44q-3.75 0-7.025-1.4-3.275-1.4-5.725-3.85Q8.8 36.3 7.4 33.025 6 29.75 6 26h3q0 6.25 4.375 10.625T24 41q6.25 0 10.625-4.375T39 26q0-6.25-4.25-10.625T24.25 11H23.1l3.65 3.65-2.05 2.1-7.35-7.35 7.35-7.35 2.05 2.05-3.9 3.9H24q3.75 0 7.025 1.4 3.275 1.4 5.725 3.85 2.45 2.45 3.85 5.725Q42 22.25 42 26q0 3.75-1.4 7.025-1.4 3.275-3.85 5.725-2.45 2.45-5.725 3.85Q27.75 44 24 44Z"/></svg></button>
+            <button id="close-button" onclick="window.close()"><svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m16.5 33.6 7.5-7.5 7.5 7.5 2.1-2.1-7.5-7.5 7.5-7.5-2.1-2.1-7.5 7.5-7.5-7.5-2.1 2.1 7.5 7.5-7.5 7.5ZM24 44q-4.1 0-7.75-1.575-3.65-1.575-6.375-4.3-2.725-2.725-4.3-6.375Q4 28.1 4 24q0-4.15 1.575-7.8 1.575-3.65 4.3-6.35 2.725-2.7 6.375-4.275Q19.9 4 24 4q4.15 0 7.8 1.575 3.65 1.575 6.35 4.275 2.7 2.7 4.275 6.35Q44 19.85 44 24q0 4.1-1.575 7.75-1.575 3.65-4.275 6.375t-6.35 4.3Q28.15 44 24 44Zm0-3q7.1 0 12.05-4.975Q41 31.05 41 24q0-7.1-4.95-12.05Q31.1 7 24 7q-7.05 0-12.025 4.95Q7 16.9 7 24q0 7.05 4.975 12.025Q16.95 41 24 41Zm0-17Z"/></svg></button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="game-board" id="game-board">
+            <div id="square" class="square" style="top: 0px; left: 0px"></div>
+        </div>
+        <div class="tool-bar" id="tool-bar">
+            <div class="timer-score">
+                <div class="timer" id="timer">30</div>
+                <div class="score" id="score">10</div>
+            </div>
+            <div class="control-buttons">
+                <button class="control-button" onclick="fireEvent('ArrowLeft')"><svg xmlns="http://www.w3.org/2000/svg" height="48px" width="48px"><path d="M28 34 18 24l10-10Z"/></svg></button>
+                <button class="control-button" onclick="fireEvent('ArrowUp')"><svg xmlns="http://www.w3.org/2000/svg" height="48px" width="48px"><path d="m14 28 10-10.05L34 28Z"/></svg></button>
+                <button class="control-button" onclick="fireEvent('ArrowDown')"><svg xmlns="http://www.w3.org/2000/svg" height="48px" width="48px"><path d="m24 30-10-9.95h20Z"/></svg></button>
+                <button class="control-button" onclick="fireEvent('ArrowRight')"><svg xmlns="http://www.w3.org/2000/svg" height="48px" width="48px"><path d="M20 34V14l10 10Z"/></svg></button>
+            </div>
+        </div>
+    </div>
+    
+    <script>        
+        const fullWidth = document.getElementById('game-board').clientWidth
+        const fullHeight = document.getElementById('game-board').clientHeight
+
+        let score = document.getElementById('score')
+        let timer = document.getElementById('timer')
+
+        let time = 30
+        let timerInterval = setInterval(() => {
+            if(time > 0){
+                time--
+                if(time<10){
+                    time =  "0" + time
+                }
+                timer.innerHTML = time
+            }else{
+                document.getElementById('score-digits').innerHTML = score.innerHTML
+                document.getElementById('score-card-container').style.display = 'flex'
+                clearInterval(timerInterval);
+            }
+        }, 1000);
+
+        let foodArray = []
+        
+        for(let i = 0; i<10; i++){
+            let randHeight = Math.floor((Math.random() * (fullHeight)))
+            randHeight = randHeight - randHeight % 10
+            let randWidth = Math.floor((Math.random() * fullWidth))
+            randWidth = randWidth - randWidth % 10
+            const para = document.createElement("div");
+            para.id = `square-green${i}` 
+            para.className = "square-green"
+            para.style.top = `${randHeight}px`;
+            para.style.left = `${randWidth}px`;
+            foodArray.push([randWidth, randHeight])
+            document.body.appendChild(para);
+        }
+
+        let square = document.getElementById('square')
+
+        window.addEventListener('keydown', event => {
+            switch(event.key){
+                case 'ArrowUp' :
+                    if(parseInt(square.style.top) - 10 >= 0){
+                        square.style.top = `${parseInt(square.style.top) - 10}px`
+                    } 
+                    checkFood(square.style.top, square.style.left)
+                    break 
+                case 'ArrowDown' : 
+                    if(parseInt(square.style.top) + 10 <= fullHeight){
+                        square.style.top = `${parseInt(square.style.top) + 10}px`
+                    }
+                    
+                    checkFood(square.style.top, square.style.left)
+                    break 
+                case 'ArrowLeft' : 
+                    if( parseInt(square.style.left) - 10 >= 0){
+                        square.style.left = `${parseInt(square.style.left) - 10}px`
+                    }
+                    checkFood(square.style.top, square.style.left)
+                    break 
+                case 'ArrowRight' : 
+                    if(parseInt(square.style.left) + 10 <= fullWidth)
+                    square.style.left = `${parseInt(square.style.left) + 10}px`
+                    checkFood(square.style.top, square.style.left)
+                    break 
+            }
+        })
+
+        function checkFood(topPoint, leftPoint){
+            let greenSquare = document.getElementsByClassName('square-green')
+            for(let i=0;i<greenSquare.length;i++){
+                if(greenSquare[i].style.top === topPoint && greenSquare[i].style.left === leftPoint){
+                    let id = greenSquare[i].id
+                    document.getElementById(id).remove()
+                    foodArray.pop(foodArray.filter((food) => food[0] == parseInt(leftPoint) && food[1] == parseInt(topPoint)))
+                    if(timer.innerHTML > 0){
+                        let score_digits = foodArray.length
+                        if(score_digits < 10){
+                            score_digits = "0"+score_digits
+                        }
+                        score.innerHTML = score_digits
+                    }else{
+                        document.getElementById('score-card-container').style.display = 'flex'
+                    }
+                    
+                }
+            }
+        }
+
+        function fireEvent(typeOfKey){
+            switch(typeOfKey){
+                case 'ArrowUp' : 
+                    square.style.top = `${parseInt(square.style.top) - 10}px`
+                    checkFood(square.style.top, square.style.left)
+                    break 
+                case 'ArrowDown' : 
+                    square.style.top = `${parseInt(square.style.top) + 10}px`
+                    checkFood(square.style.top, square.style.left)
+                    break 
+                case 'ArrowLeft' : 
+                    square.style.left = `${parseInt(square.style.left) - 10}px`
+                    checkFood(square.style.top, square.style.left)
+                    break 
+                case 'ArrowRight' : 
+                    square.style.left = `${parseInt(square.style.left) + 10}px`
+                    checkFood(square.style.top, square.style.left)
+                    break 
+            }
+        }
+
+    </script>
+</body>
+</html>
