@@ -230,7 +230,7 @@
                     document.getElementById(id).remove()
                     foodArray.pop(foodArray.filter((food) => food[0] == parseInt(leftPoint) && food[1] == parseInt(topPoint)))
                     if(timer.innerHTML > 0){
-                        let score_digits = foodArray.length
+                        let score_digits = 10 - foodArray.length
                         if(score_digits < 10){
                             score_digits = "0"+score_digits
                         }
